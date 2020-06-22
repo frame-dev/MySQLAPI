@@ -23,7 +23,7 @@ public class SQL {
         }
         String builder = stringBuilder.toString();
         try {
-            String sql = "CREATE TABLE IF NOT EXISTS " + tablename + " (" + builder + ");";
+            String sql = "CREATE TABLE IF NOT EXISTS " + tablename + " (" + builder + ",Numbers INT AUTO_INCREMENT KEY,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);";
             PreparedStatement stmt = MySQL.getConnection().prepareStatement(sql);
             stmt.executeUpdate();
         } catch (SQLException e) {
