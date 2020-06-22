@@ -1,0 +1,7 @@
+#MySQL Connection!
+MySQL:
+  Host: ' '
+  User: ' '
+  Password: ' '
+  Database: ' '
+  Port: 3306
