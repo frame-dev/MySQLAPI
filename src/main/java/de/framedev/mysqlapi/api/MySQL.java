@@ -1,19 +1,15 @@
 package de.framedev.mysqlapi.api;
 
 import de.framedev.mysqlapi.main.Main;
+import de.framedev.mysqlapi.managers.PasswordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 
 
@@ -81,7 +77,7 @@ public class MySQL {
         if (con == null) {
             close();
             try {
-                con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, user, password);
+                con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?useUnicode=yes&characterEncoding=UTF-8&useSSL=false", user, password);
                 con.setNetworkTimeout(Executors.newFixedThreadPool(100), 1000000);
                 con.createStatement().executeUpdate("SET GLOBAL max_connections=1200;");
                 return con;
@@ -91,7 +87,7 @@ public class MySQL {
         } else {
             close();
             try {
-                con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, user, password);
+                con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?useUnicode=yes&characterEncoding=UTF-8&useSSL=false", user, password);
                 con.setNetworkTimeout(Executors.newFixedThreadPool(100), 1000000);
                 con.createStatement().executeUpdate("SET GLOBAL max_connections=1200;");
                 return con;
@@ -106,7 +102,7 @@ public class MySQL {
     public static void connect() {
         if (con == null) {
             try {
-                con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, user, password);
+                con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?useUnicode=yes&characterEncoding=UTF-8&useSSL=false", user, password);
                 con.setNetworkTimeout(Executors.newFixedThreadPool(100), 1000000);
                 con.createStatement().executeUpdate("SET GLOBAL max_connections=1200;");
                 Bukkit.getConsoleSender().sendMessage(MySQLPrefix + "-Verbindung wurde aufgebaut!");
@@ -131,7 +127,11 @@ public class MySQL {
 
     public static class MySQLConnection implements Serializable {
 
-        private String host;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 7918204026312519949L;
+		private String host;
         private String user;
         private String password;
         private String database;
@@ -140,7 +140,8 @@ public class MySQL {
         public MySQLConnection(String host, String user, String password, String database, String port) {
             this.host = host;
             this.user = user;
-            this.password = password;
+            String salt = PasswordUtils.getSalt(30);
+            this.password = PasswordUtils.generateSecurePassword(password,salt);
             this.database = database;
             this.port = port;
         }

@@ -5,3 +5,10 @@ MySQL:
   Password: ' '
   Database: ' '
   Port: 3306
+  Use: false
+
+#Default Path plugins/MySQLAPI
+SQLite:
+  Path: ' '
+  FileName: 'database'
+  Use: false

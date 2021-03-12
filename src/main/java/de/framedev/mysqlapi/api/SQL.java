@@ -1,5 +1,7 @@
 package de.framedev.mysqlapi.api;
 
+import de.framedev.mysqlapi.main.Main;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,8 +12,9 @@ public class SQL {
 
     /**
      * Erstelle einen Table mit einem Table Name und verschiedene Column
+     *
      * @param tablename TableName der erstellt wird
-     * @param columns Kolumm die erstellt werden
+     * @param columns   Kolumm die erstellt werden
      */
     public static void createTable(String tablename, String... columns) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -23,18 +26,28 @@ public class SQL {
         }
         String builder = stringBuilder.toString();
         try {
-            String sql = "CREATE TABLE IF NOT EXISTS " + tablename + " (" + builder + ",Numbers INT AUTO_INCREMENT KEY,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);";
-            PreparedStatement stmt = MySQL.getConnection().prepareStatement(sql);
-            stmt.executeUpdate();
+            if (Main.getInstance().isMysql()) {
+                String sql = "CREATE TABLE IF NOT EXISTS " + tablename + " (" + builder + ",Numbers INT AUTO_INCREMENT KEY,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);";
+                PreparedStatement stmt = MySQL.getConnection().prepareStatement(sql);
+                stmt.executeUpdate();
+            } else if (Main.getInstance().isSQL()) {
+                String sql = "CREATE TABLE IF NOT EXISTS " + tablename + " (ID INTEGER PRIMARY KEY AUTOINCREMENT," + builder + ",created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);";
+                PreparedStatement stmt = SQLite.connect().prepareStatement(sql);
+                stmt.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (MySQL.con != null) {
+            if (Main.getInstance().isMysql()) {
                 MySQL.close();
+            } else if (Main.getInstance().isSQL()) {
+                SQLite.close();
             }
         }
-        if (MySQL.con != null) {
+        if (Main.getInstance().isMysql()) {
             MySQL.close();
+        } else if (Main.getInstance().isSQL()) {
+            SQLite.close();
         }
     }
 
@@ -51,17 +64,26 @@ public class SQL {
         stringBuilder.append(" (").append(newStringBuilder.toString()).append(")").append(" VALUES ").append("(").append(data).append(")");
         String builder2 = stringBuilder.toString();
         try {
-            Statement stmt = MySQL.getConnection().createStatement();
-            stmt.executeUpdate(builder2);
+            if (Main.getInstance().isMysql()) {
+                Statement stmt = MySQL.getConnection().createStatement();
+                stmt.executeUpdate(builder2);
+            } else if (Main.getInstance().isSQL()) {
+                Statement stmt = SQLite.connect().createStatement();
+                stmt.executeUpdate(builder2);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (MySQL.con != null) {
+            if (Main.getInstance().isMysql()) {
                 MySQL.close();
+            } else if (Main.getInstance().isSQL()) {
+                SQLite.close();
             }
         }
-        if (MySQL.con != null) {
+        if (Main.getInstance().isMysql()) {
             MySQL.close();
+        } else if (Main.getInstance().isSQL()) {
+            SQLite.close();
         }
     }
 
@@ -70,17 +92,26 @@ public class SQL {
         stringBuilder.append("UPDATE " + table + " SET ").append(selected + " = " + data).append(" WHERE " + where);
         String sql = stringBuilder.toString();
         try {
-            Statement stmt = MySQL.getConnection().createStatement();
-            stmt.executeUpdate(sql);
+            if (Main.getInstance().isMysql()) {
+                Statement stmt = MySQL.getConnection().createStatement();
+                stmt.executeUpdate(sql);
+            } else if (Main.getInstance().isSQL()) {
+                Statement stmt = SQLite.connect().createStatement();
+                stmt.executeUpdate(sql);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (MySQL.con != null) {
+            if (Main.getInstance().isMysql()) {
                 MySQL.close();
+            } else if (Main.getInstance().isSQL()) {
+                SQLite.close();
             }
         }
-        if (MySQL.con != null) {
+        if (Main.getInstance().isMysql()) {
             MySQL.close();
+        } else if (Main.getInstance().isSQL()) {
+            SQLite.close();
         }
     }
 
@@ -91,17 +122,26 @@ public class SQL {
                 .append(" WHERE " + where);
         String sql = sb.toString();
         try {
-            Statement stmt = MySQL.getConnection().createStatement();
-            stmt.executeUpdate(sql);
+            if (Main.getInstance().isMysql()) {
+                Statement stmt = MySQL.getConnection().createStatement();
+                stmt.executeUpdate(sql);
+            } else if (Main.getInstance().isSQL()) {
+                Statement stmt = SQLite.connect().createStatement();
+                stmt.executeUpdate(sql);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (MySQL.con != null) {
+            if (Main.getInstance().isMysql()) {
                 MySQL.close();
+            } else if (Main.getInstance().isSQL()) {
+                SQLite.close();
             }
         }
-        if (MySQL.con != null) {
+        if (Main.getInstance().isMysql()) {
             MySQL.close();
+        } else if (Main.getInstance().isSQL()) {
+            SQLite.close();
         }
     }
 
@@ -112,17 +152,26 @@ public class SQL {
                 .append(" AND " + and + ";");
         String sql = sb.toString();
         try {
-            Statement stmt = MySQL.getConnection().createStatement();
-            stmt.executeUpdate(sql);
+            if (Main.getInstance().isMysql()) {
+                Statement stmt = MySQL.getConnection().createStatement();
+                stmt.executeUpdate(sql);
+            } else if (Main.getInstance().isSQL()) {
+                Statement stmt = SQLite.connect().createStatement();
+                stmt.executeUpdate(sql);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (MySQL.con != null) {
+            if (Main.getInstance().isMysql()) {
                 MySQL.close();
+            } else if (Main.getInstance().isSQL()) {
+                SQLite.close();
             }
         }
-        if (MySQL.con != null) {
+        if (Main.getInstance().isMysql()) {
             MySQL.close();
+        } else if (Main.getInstance().isSQL()) {
+            SQLite.close();
         }
     }
 
@@ -135,28 +184,47 @@ public class SQL {
                 .append(" = '" + data + "';");
 
         try {
-            Statement statement = MySQL.getConnection().createStatement();
-            String sql = stringBuilder.toString();
-            ResultSet res = statement.executeQuery(sql);
-            if (res.next()) {
-                if (res.getString(column) == null) {
-                    return false;
-                } else {
-                    res.close();
-                    statement.close();
-                    return true;
+            if (Main.getInstance().isMysql()) {
+                Statement statement = MySQL.getConnection().createStatement();
+                String sql = stringBuilder.toString();
+                ResultSet res = statement.executeQuery(sql);
+                if (res.next()) {
+                    if (res.getString(column) == null) {
+                        return false;
+                    } else {
+                        res.close();
+                        statement.close();
+                        return true;
+                    }
+                }
+            } else if (Main.getInstance().isSQL()) {
+                Statement statement = SQLite.connect().createStatement();
+                String sql = stringBuilder.toString();
+                ResultSet res = statement.executeQuery(sql);
+                if (res.next()) {
+                    if (res.getString(column) == null) {
+                        return false;
+                    } else {
+                        res.close();
+                        statement.close();
+                        return true;
+                    }
                 }
             }
             return false;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (MySQL.con != null) {
+            if (Main.getInstance().isMysql()) {
                 MySQL.close();
+            } else if (Main.getInstance().isSQL()) {
+                SQLite.close();
             }
         }
-        if (MySQL.con != null) {
+        if (Main.getInstance().isMysql()) {
             MySQL.close();
+        } else if (Main.getInstance().isSQL()) {
+            SQLite.close();
         }
         return false;
     }
@@ -170,26 +238,41 @@ public class SQL {
                 .append(" = '" + data + "' AND " + and + ";");
 
         try {
-            Statement statement = MySQL.getConnection().createStatement();
-            String sql = stringBuilder.toString();
-            ResultSet res = statement.executeQuery(sql);
-            if (res.next()) {
-                if (res.getString(column) == null) {
-                    return false;
+            if (Main.getInstance().isMysql()) {
+                Statement statement = MySQL.getConnection().createStatement();
+                String sql = stringBuilder.toString();
+                ResultSet res = statement.executeQuery(sql);
+                if (res.next()) {
+                    if (res.getString(column) == null) {
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
+            } else if (Main.getInstance().isSQL()) {
+                Statement statement = SQLite.connect().createStatement();
+                String sql = stringBuilder.toString();
+                ResultSet res = statement.executeQuery(sql);
+                if (res.next()) {
+                    if (res.getString(column) == null) {
+                        return false;
+                    }
+                    return true;
+                }
             }
-
             return false;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (MySQL.con != null) {
+            if (Main.getInstance().isMysql()) {
                 MySQL.close();
+            } else if (Main.getInstance().isSQL()) {
+                SQLite.close();
             }
         }
-        if (MySQL.con != null) {
+        if (Main.getInstance().isMysql()) {
             MySQL.close();
+        } else if (Main.getInstance().isSQL()) {
+            SQLite.close();
         }
         return false;
     }
@@ -205,26 +288,41 @@ public class SQL {
                 .append("'");
         String sql = stringBuilder.toString();
         try {
-            Statement statement = MySQL.getConnection().createStatement();
-            ResultSet res = statement.executeQuery(sql);
-            if (res.next()) {
-                o = res.getObject(selected);
-                if (o != null) {
+            if (Main.getInstance().isMysql()) {
+                Statement statement = MySQL.getConnection().createStatement();
+                ResultSet res = statement.executeQuery(sql);
+                if (res.next()) {
+                    o = res.getObject(selected);
+                    if (o != null) {
+                        return o;
+                    }
                     return o;
                 }
-                return o;
+            } else if (Main.getInstance().isSQL()) {
+                Statement statement = SQLite.connect().createStatement();
+                ResultSet res = statement.executeQuery(sql);
+                if (res.next()) {
+                    o = res.getObject(selected);
+                    if (o != null) {
+                        return o;
+                    }
+                    return o;
+                }
             }
-
             return o;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (MySQL.con != null) {
+            if (Main.getInstance().isMysql()) {
                 MySQL.close();
+            } else if (Main.getInstance().isSQL()) {
+                SQLite.close();
             }
         }
-        if (MySQL.con != null) {
+        if (Main.getInstance().isMysql()) {
             MySQL.close();
+        } else if (Main.getInstance().isSQL()) {
+            SQLite.close();
         }
         return o;
     }
@@ -235,38 +333,66 @@ public class SQL {
         String sql = stringBuilder.toString();
 
         try {
-            Statement stmt = MySQL.getConnection().createStatement();
-            stmt.executeUpdate(sql);
+            if (Main.getInstance().isMysql()) {
+                Statement stmt = MySQL.getConnection().createStatement();
+                stmt.executeUpdate(sql);
+            } else if(Main.getInstance().isSQL()) {
+                Statement stmt = SQLite.connect().createStatement();
+                stmt.executeUpdate(sql);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (MySQL.con != null) {
+            if (Main.getInstance().isMysql()) {
                 MySQL.close();
+            } else if (Main.getInstance().isSQL()) {
+                SQLite.close();
             }
         }
-        if (MySQL.con != null) {
+        if (Main.getInstance().isMysql()) {
             MySQL.close();
+        } else if (Main.getInstance().isSQL()) {
+            SQLite.close();
         }
     }
 
     public static boolean isTableExists(String table) {
         try {
-            Statement statement = MySQL.getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SHOW TABLES LIKE '" + table + "'");
-            if (rs.next()) {
-                return true;
+            if(Main.getInstance().isMysql()) {
+                Statement statement = MySQL.getConnection().createStatement();
+                ResultSet rs = statement.executeQuery("SHOW TABLES LIKE '" + table + "'");
+                if (rs.next()) {
+                    return true;
+                }
+            } else if(Main.getInstance().isSQL()) {
+                Statement statement = SQLite.connect().createStatement();
+                ResultSet rs = statement.executeQuery("SELECT \n" +
+                        "    name\n" +
+                        "FROM \n" +
+                        "    sqlite_master \n" +
+                        "WHERE \n" +
+                        "    type ='table' AND \n" +
+                        "    name NOT LIKE 'sqlite_%';");
+                while (rs.next()) {
+                    if(rs.getString("name").equalsIgnoreCase(table))
+                        return true;
+                }
             }
             return false;
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (MySQL.con != null) {
+            if (Main.getInstance().isMysql()) {
                 MySQL.close();
+            } else if (Main.getInstance().isSQL()) {
+                SQLite.close();
             }
         }
-        if (MySQL.con != null) {
+        if (Main.getInstance().isMysql()) {
             MySQL.close();
+        } else if (Main.getInstance().isSQL()) {
+            SQLite.close();
         }
         return false;
     }
