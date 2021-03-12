@@ -3,16 +3,16 @@ An API for MySQL connection in Java
 
 gradle:
 
-''' text
+```text
 repositories {
 		maven { url 'https://jitpack.io' }
 }
 dependencies {
 	     implementation 'com.github.frame-dev:MySQLAPI:1.0.3'
 }
-'''
+```
 Maven:
-''' text
+```text
 <repository>
 		<id>jitpack.io</id>
 		<url>https://jitpack.io</url>
@@ -22,4 +22,4 @@ Maven:
 	  <artifactId>MySQLAPI</artifactId>
 	  <version>1.0.3</version>
 </dependency>
-'''
+```
