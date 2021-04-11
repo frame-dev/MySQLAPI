@@ -9,7 +9,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.frame-dev:MySQLAPI:1.0.4'
+    implementation 'com.github.frame-dev:MySQLAPI:1.0.5'
 }
 ```
 Maven:
@@ -21,6 +21,6 @@ Maven:
 <dependency>
   <groupId>com.github.frame-dev</groupId>
   <artifactId>MySQLAPI</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
 </dependency>
 ```
