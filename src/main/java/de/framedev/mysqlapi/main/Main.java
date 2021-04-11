@@ -36,12 +36,14 @@ public class Main extends JavaPlugin {
             if (getConfig().getString("MySQL.Host").equalsIgnoreCase(" ")) {
                 Bukkit.getConsoleSender().sendMessage("§cBitte bearbeite die Config.yml!");
                 Bukkit.getConsoleSender().sendMessage("§6[§bMySQL§6] §c§lERROR");
+                getLogger().log(Level.INFO, "MySQL Enabled!");
             }
         } else if (isSQL()) {
             new SQLite(getConfig().getString("SQLite.Path"), getConfig().getString("SQLite.FileName"));
             if (getConfig().getString("SQLite.Path").equalsIgnoreCase(" ")) {
                 Bukkit.getConsoleSender().sendMessage("§cBitte bearbeite die Config.yml!");
                 Bukkit.getConsoleSender().sendMessage("§6[§bSQLite§6] §c§lERROR");
+                getLogger().log(Level.INFO, "SQLite Enabled!");
             }
         }
         new BukkitRunnable() {
