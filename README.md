@@ -1,4 +1,5 @@
 # MySQLAPI
+[![](https://jitpack.io/v/frame-dev/MySQLAPI.svg)](https://jitpack.io/#frame-dev/MySQLAPI)
 An API for MySQL connection in Java
 
 gradle:
@@ -8,7 +9,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.frame-dev:MySQLAPI:1.0.3'
+    implementation 'com.github.frame-dev:MySQLAPI:1.0.4'
 }
 ```
 Maven:
@@ -20,6 +21,6 @@ Maven:
 <dependency>
   <groupId>com.github.frame-dev</groupId>
   <artifactId>MySQLAPI</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
 </dependency>
 ```
