@@ -9,6 +9,6 @@ MySQL:
 
 #Default Path plugins/MySQLAPI
 SQLite:
-  Path: ' '
+  Path: 'plugins/MySQLAPI'
   FileName: 'database'
   Use: false

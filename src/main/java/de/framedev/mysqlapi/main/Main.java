@@ -43,15 +43,18 @@ public class Main extends JavaPlugin {
             if (getConfig().getString("SQLite.Path").equalsIgnoreCase(" ")) {
                 Bukkit.getConsoleSender().sendMessage("§cBitte bearbeite die Config.yml!");
                 Bukkit.getConsoleSender().sendMessage("§6[§bSQLite§6] §c§lERROR");
+            } else {
                 getLogger().log(Level.INFO, "SQLite Enabled!");
             }
         }
         new BukkitRunnable() {
             @Override
             public void run() {
-                MySQL.MySQLConnection connection = new MySQL.MySQLConnection(MySQL.host, MySQL.user, MySQL.password, MySQL.database, MySQL.port);
-                Ser.createConnection(connection.toString(), "connection");
-                getLogger().log(Level.INFO, "MySQL Connection wurden gespeichert!");
+                if(getConfig().getBoolean("MySQL.Use")) {
+                    MySQL.MySQLConnection connection = new MySQL.MySQLConnection(MySQL.host, MySQL.user, MySQL.password, MySQL.database, MySQL.port);
+                    Ser.createConnection(connection.toString(), "connection");
+                    getLogger().log(Level.INFO, "MySQL Connection wurden gespeichert!");
+                }
             }
         }.runTaskLater(this, 120);
     }
