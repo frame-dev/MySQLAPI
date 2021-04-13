@@ -6,21 +6,21 @@ gradle:
 
 ```text
 repositories {
-    maven { url 'https://jitpack.io' }
+    maven { url 'http://framedev.stream:82/releases' }
 }
 dependencies {
-    implementation 'com.github.frame-dev:MySQLAPI:1.0.5'
+    compileOnly 'de.framedev:MySQLAPI:1.0.5-SNAPSHOT'
 }
 ```
 Maven:
 ```text
 <repository>
-  <id>jitpack.io</id>
-  <url>https://jitpack.io</url>
+  <id>repository</id>
+  <url>http://framedev.stream:82/releases</url>
 </repository>
 <dependency>
-  <groupId>com.github.frame-dev</groupId>
+  <groupId>de.framedev</groupId>
   <artifactId>MySQLAPI</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.5-SNAPSHOT</version>
 </dependency>
 ```
