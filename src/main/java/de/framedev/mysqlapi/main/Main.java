@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 /*
@@ -101,9 +102,7 @@ public class Main extends JavaPlugin {
 
     public String encryptText(String text) {
         char[] chars = text.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            chars[i] = '*';
-        }
+        Arrays.fill(chars, '*');
         return String.valueOf(chars);
     }
 
