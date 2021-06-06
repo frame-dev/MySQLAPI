@@ -3,6 +3,3 @@ version: 1.0.6
 main: de.framedev.mysqlapi.main.Main
 author: FrameDev
 load: STARTUP
-
-commands:
-  mysqlinfo:

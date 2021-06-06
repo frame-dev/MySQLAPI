@@ -33,6 +33,7 @@ public class Main extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
         if (isMysql()) {
+            // Setup MySQL
             new MySQL();
             if (getConfig().getString("MySQL.Host").equalsIgnoreCase(" ")) {
                 Bukkit.getConsoleSender().sendMessage("§cBitte bearbeite die Config.yml!");
@@ -40,6 +41,7 @@ public class Main extends JavaPlugin {
                 getLogger().log(Level.INFO, "MySQL Enabled!");
             }
         } else if (isSQL()) {
+            // Setup SQLite
             new SQLite(getConfig().getString("SQLite.Path"), getConfig().getString("SQLite.FileName"));
             if (getConfig().getString("SQLite.Path").equalsIgnoreCase(" ")) {
                 Bukkit.getConsoleSender().sendMessage("§cBitte bearbeite die Config.yml!");
@@ -48,19 +50,19 @@ public class Main extends JavaPlugin {
                 getLogger().log(Level.INFO, "SQLite Enabled!");
             }
         }
-        new BukkitRunnable() {
+        /*new BukkitRunnable() {
             @Override
             public void run() {
-                if(getConfig().getBoolean("MySQL.Use")) {
+                if (getConfig().getBoolean("MySQL.Use")) {
                     MySQL.MySQLConnection connection = new MySQL.MySQLConnection(MySQL.host, MySQL.user, MySQL.password, MySQL.database, MySQL.port);
                     Ser.createConnection(connection.toString(), "connection");
                     getLogger().log(Level.INFO, "MySQL Connection wurden gespeichert!");
                 }
             }
-        }.runTaskLater(this, 120);
+        }.runTaskLater(this, 120);*/
     }
 
-    @Override
+    /*@Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("mysqlinfo")) {
             if (sender.hasPermission("mysqlapi.info")) {
@@ -94,7 +96,7 @@ public class Main extends JavaPlugin {
         }
         return super.onCommand(sender, command, label, args);
 
-    }
+    }*/
 
     public static Main getInstance() {
         return instance;
