@@ -9,7 +9,7 @@ repositories {
     maven { url 'http://framedev.stream:82/releases' }
 }
 dependencies {
-    compileOnly 'de.framedev:MySQLAPI:1.0.5-SNAPSHOT'
+    compileOnly 'de.framedev:MySQLAPI:1.0.7-SNAPSHOT'
 }
 ```
 Maven:
@@ -21,6 +21,6 @@ Maven:
 <dependency>
   <groupId>de.framedev</groupId>
   <artifactId>MySQLAPI</artifactId>
-  <version>1.0.5-SNAPSHOT</version>
+  <version>1.0.7-SNAPSHOT</version>
 </dependency>
 ```
