@@ -1,17 +1,11 @@
 package de.framedev.mysqlapi.main;
 
-import com.google.gson.GsonBuilder;
 import de.framedev.mysqlapi.api.MySQL;
+import de.framedev.mysqlapi.api.MySQLAPI;
 import de.framedev.mysqlapi.api.SQLite;
-import de.framedev.mysqlapi.managers.Ser;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.logging.Level;
 
@@ -30,6 +24,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        new MySQLAPI();
         getConfig().options().copyDefaults(true);
         saveConfig();
         if (isMysql()) {
