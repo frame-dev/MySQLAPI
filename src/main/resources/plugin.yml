@@ -1,5 +1,5 @@
 name: MySQLAPI
-version: 1.0.8
+version: ${project.version}
 main: de.framedev.mysqlapi.main.Main
 author: FrameDev
 load: STARTUP
