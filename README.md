@@ -6,7 +6,7 @@ gradle:
 
 ```text
 repositories {
-    maven { url 'http://framedev.stream:82/releases' }
+    maven { url 'https://framedev.ch:444/releases' }
 }
 dependencies {
     compileOnly 'de.framedev:MySQLAPI:1.0.7-SNAPSHOT'
@@ -16,7 +16,7 @@ Maven:
 ```text
 <repository>
   <id>repository</id>
-  <url>http://framedev.stream:82/releases</url>
+  <url>https://framedev.ch:444/releases</url>
 </repository>
 <dependency>
   <groupId>de.framedev</groupId>
