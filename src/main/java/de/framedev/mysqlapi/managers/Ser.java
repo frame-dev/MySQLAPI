@@ -1,6 +1,10 @@
 package de.framedev.mysqlapi.managers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import de.framedev.mysqlapi.api.MySQL;
 import de.framedev.mysqlapi.main.Main;
+import org.mindrot.BCrypt;
 
 import java.io.*;
 
@@ -14,26 +18,28 @@ import java.io.*;
  */
 public class Ser {
 
-    public static void createConnection(Object obj,String fileName) {
-        File file = new File(Main.getInstance().getDataFolder(),fileName+".my");
+    public static void createConnection(MySQL.MySQLConnection obj, String fileName) {
+        File file = new File(Main.getInstance().getDataFolder(),fileName+".json");
+        obj.setPassword(BCrypt.hashpw(obj.getPassword(), BCrypt.gensalt()));
         try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
-            objectOutputStream.writeObject(obj);
-            objectOutputStream.close();
+            FileWriter writer = new FileWriter(file);
+            writer.write(new GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(obj));
+            writer.flush();
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static Object getMySQLLogs(String fileName) throws NullPointerException {
-        File file = new File(Main.getInstance().getDataFolder(),fileName+".my");
-        Object object = null;
+    public static MySQL.MySQLConnection getMySQLLogs(String fileName) throws NullPointerException {
+        File file = new File(Main.getInstance().getDataFolder(),fileName+".json");
+        MySQL.MySQLConnection object = null;
         if (file.exists()) {
             try {
-                ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
-                object = objectInputStream.readObject();
-                objectInputStream.close();
-            } catch (IOException | ClassNotFoundException e) {
+                FileReader reader = new FileReader(file);
+                object = new Gson().fromJson(reader, MySQL.MySQLConnection.class);
+                reader.close();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

@@ -1,5 +1,7 @@
 name: MySQLAPI
-version: 1.0.9-RELEASE
+version: 1.1.0-RELEASE
 main: de.framedev.mysqlapi.main.Main
 author: FrameDev
 load: STARTUP
+commands:
+  mysqlinfo:

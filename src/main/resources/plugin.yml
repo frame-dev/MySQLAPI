@@ -3,3 +3,5 @@ version: ${project.version}
 main: de.framedev.mysqlapi.main.Main
 author: FrameDev
 load: STARTUP
+commands:
+  mysqlinfo:

@@ -1,12 +1,32 @@
 package de.framedev.mysqlapi.main;
 
+import com.google.gson.GsonBuilder;
 import de.framedev.mysqlapi.api.MySQL;
-import de.framedev.mysqlapi.api.MySQLAPI;
 import de.framedev.mysqlapi.api.SQLite;
+import de.framedev.mysqlapi.managers.Ser;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.mindrot.BCrypt;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.*;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.AlgorithmParameters;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.logging.Level;
 
 /*
@@ -24,7 +44,6 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        new MySQLAPI();
         getConfig().options().copyDefaults(true);
         saveConfig();
         if (isMysql()) {
@@ -45,37 +64,27 @@ public class Main extends JavaPlugin {
                 getLogger().log(Level.INFO, "SQLite Enabled!");
             }
         }
-        /*new BukkitRunnable() {
+        new BukkitRunnable() {
             @Override
             public void run() {
                 if (getConfig().getBoolean("MySQL.Use")) {
                     MySQL.MySQLConnection connection = new MySQL.MySQLConnection(MySQL.host, MySQL.user, MySQL.password, MySQL.database, MySQL.port);
-                    Ser.createConnection(connection.toString(), "connection");
+                    Ser.createConnection(connection, "connection");
                     getLogger().log(Level.INFO, "MySQL Connection wurden gespeichert!");
                 }
             }
-        }.runTaskLater(this, 120);*/
+        }.runTaskLater(this, 120);
     }
 
-    /*@Override
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("mysqlinfo")) {
             if (sender.hasPermission("mysqlapi.info")) {
                 if (args.length == 0) {
-                    MySQL.MySQLConnection connection = MySQL.MySQLConnection.getFromString((String) Ser.getMySQLLogs("connection"));
-                    try {
-                        File file = new File(getDataFolder(), "mysql.json");
-                        FileWriter writer = new FileWriter(file);
-                        writer.write(new GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(connection));
-                        writer.flush();
-                        writer.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    MySQL.MySQLConnection connection = Ser.getMySQLLogs("connection");
                     sender.sendMessage("§6Host §b: " + connection.getHost());
                     sender.sendMessage("§6User §b: " + connection.getUser());
-                    String password = encryptText(connection.getPassword());
-                    sender.sendMessage("§6Password §b: " + password);
+                    sender.sendMessage("§6Password §b: " + connection.getPassword());
                     sender.sendMessage("§6Database §b: " + connection.getDatabase());
                     sender.sendMessage("§6Port §b: " + connection.getPort());
                     if (MySQL.con != null) {
@@ -91,16 +100,10 @@ public class Main extends JavaPlugin {
         }
         return super.onCommand(sender, command, label, args);
 
-    }*/
+    }
 
     public static Main getInstance() {
         return instance;
-    }
-
-    public String encryptText(String text) {
-        char[] chars = text.toCharArray();
-        Arrays.fill(chars, '*');
-        return String.valueOf(chars);
     }
 
     public boolean isMysql() {
