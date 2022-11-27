@@ -39,13 +39,18 @@ import java.util.logging.Level;
  */
 public class Main extends JavaPlugin {
 
+    // Singleton
     private static Main instance;
 
     @Override
     public void onEnable() {
         instance = this;
+
+        // Save Default Config
         getConfig().options().copyDefaults(true);
         saveConfig();
+
+        // Check for Connection
         if (isMysql()) {
             // Setup MySQL
             new MySQL();
@@ -64,6 +69,8 @@ public class Main extends JavaPlugin {
                 getLogger().log(Level.INFO, "SQLite Enabled!");
             }
         }
+
+        // Save MySQL Connection
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -102,14 +109,30 @@ public class Main extends JavaPlugin {
 
     }
 
+    /**
+     * This Method returns the Singleton of this Class (instance)
+     *
+     * @return return the Singleton of this Class
+     */
     public static Main getInstance() {
         return instance;
     }
 
+
+    /**
+     * Check if MySQL has been enabled in the Config File
+     *
+     * @return return MySQL.Use in config.yml
+     */
     public boolean isMysql() {
         return getConfig().getBoolean("MySQL.Use");
     }
 
+    /**
+     * Check if SQL has been enabled in the Config File
+     *
+     * @return return SQLite.Use in config.yml
+     */
     public boolean isSQL() {
         return getConfig().getBoolean("SQLite.Use");
     }

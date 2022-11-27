@@ -6,7 +6,7 @@
 
     <groupId>de.framedev</groupId>
     <artifactId>MySQLAPI</artifactId>
-    <version>1.1.0-RELEASE</version>
+    <version>1.1.1-RELEASE</version>
     <packaging>jar</packaging>
 
     <properties>
